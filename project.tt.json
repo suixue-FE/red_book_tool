@@ -1,0 +1,13 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "red_book_tool",
+  "description": "Little Red Book Creator Tools",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram"
+}
