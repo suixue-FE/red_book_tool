@@ -1,27 +1,22 @@
 import { Component, PropsWithChildren } from 'react'
-import { Provider } from 'mobx-react'
-
-import counterStore from './store/counter'
+import { View } from '@tarojs/components'
 
 import './app.less'
 
-const store = {
-  counterStore
-}
 
 class App extends Component<PropsWithChildren> {
-  componentDidMount () {}
+  componentDidMount() { }
 
-  componentDidShow () {}
+  componentDidShow() { }
 
-  componentDidHide () {}
+  componentDidHide() { }
 
   // this.props.children 就是要渲染的页面
-  render () {
+  render() {
     return (
-      <Provider store={store}>
-        {this.props.children}
-      </Provider>
+      <View>
+      {this.props.children}
+      </View>
     )
   }
 }
