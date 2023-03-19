@@ -5,7 +5,7 @@
   }
   .red-text-area{
     width: 100%;
-    height: calc(100vh - 550px);
+    height: calc(100vh - 600px);
     margin-bottom: 8px;
   }
   .taroify-native-textarea{
@@ -16,5 +16,28 @@
     color:rgb(171, 171, 171);
     padding:16px 32px;
     font-style: italic;
+  }
+}
+
+.note_template{
+  width: 80vw;
+  background-color: #f2f2f2;
+  padding: 0 0 16px 0;
+  .taroify-cell-group--inset{
+    margin: 16px 0;
+  }
+  .note_part:not(:last-child){
+    border-bottom: 1px dashed #989797;
+    margin-bottom: 8px;
+  }
+  .note_title{
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 16px;
+  }
+  .note_text{
+    white-space: pre-wrap;
+    font-size: 14px;
+    padding: 18px;
   }
 }

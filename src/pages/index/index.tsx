@@ -1,13 +1,20 @@
 import React, { useCallback } from 'react';
 import { View } from '@tarojs/components'
-import { Button, Textarea, Input, Field, Navbar } from "@taroify/core"
+import { Button, Textarea, Flex, Input, Field, Navbar, Popup, Toast } from "@taroify/core"
+import { Description, OrdersOutlined } from "@taroify/icons"
 import { observer } from 'mobx-react'
 import { throttle } from 'lodash'
+import NoteTemplate from './template'
 import store from './store';
+
+import IconButton from '../../components/IconButton'
+import Footer from '../../components/Footer'
+import { copy } from '../../util'
+import ClipboardJS from 'clipboard'
 import './index.less'
 
 function Index() {
-  const { formated_text, text, title } = store;
+  const { formated_text, text, title, show_template } = store;
 
   function handleClick() {
     const lines = text.split('');
@@ -20,10 +27,10 @@ function Index() {
     }
 
     indices?.forEach((val, index) => {
-      if (indices?.[index + 1] && indices?.[index + 1] !== val + 1) {
-        // if (lines[val + 1]?.length > 10) {
-        lines[val] = `\n${formated_text}\n`
-        // }
+      if (indices?.[index + 1] && indices?.[index + 1] != val + 1) {
+        if (lines?.[val + 1] != ' ') {
+          lines[val] = `\n${formated_text}\n`
+        }
       }
     })
 
@@ -31,16 +38,75 @@ function Index() {
     store.formatText(_text)
   }
 
+
   const handleTextAreaChange = useCallback(throttle((e) => {
     store.text = e.detail.value
   }, 500, { trailing: true }), [])
 
 
+  const handleCopyTitle = useCallback(throttle((e) => {
+    // copy(store.title)
+    var clipboard = new ClipboardJS('#red-title-btn')
+
+    clipboard.on('success', e => {
+
+      Toast.open('已成功复制到粘贴板')
+
+      //  释放内存
+
+      clipboard.destroy()
+
+    })
+
+    clipboard.on('error', e => {
+
+      // 不支持复制
+
+      Toast.open('该浏览器不支持复制')
+
+      // 释放内存
+
+      clipboard.destroy()
+
+    })
+  }, 1000, { trailing: true }), [])
+
+  const handleCopyText = useCallback(throttle((e) => {
+    var clipboard = new ClipboardJS('#red-text-btn')
+
+    clipboard.on('success', e => {
+
+      Toast.open('已成功复制到粘贴板')
+
+      //  释放内存
+
+      clipboard.destroy()
+
+    })
+
+    clipboard.on('error', e => {
+
+      // 不支持复制
+
+      Toast.open('该浏览器不支持复制')
+
+      // 释放内存
+
+      clipboard.destroy()
+
+    })
+  }, 1000, { trailing: true }), [])
+
   return (
     <View className='text-edit'>
-      <Navbar title="笔记编辑"></Navbar>
+      <Navbar>
+        <Navbar.Title>笔记编辑</Navbar.Title>
+        <Navbar.NavRight onClick={() => store.show_template = true}> 使用模板 </Navbar.NavRight>
+      </Navbar>
       <Field align="center" rightIcon={20 - title.length}>
-        <Input className="red-text-title"
+        <Input
+          value={title}
+          className="red-text-title"
           maxlength={20}
           onInput={e => {
             store.title = e.detail.value
@@ -66,6 +132,33 @@ function Index() {
       <div className='tips'>
         ”格式化“功能会在每个段落的上面一行插入段落分割符
       </div>
+
+      <Popup open={show_template} placement="right" style={{ height: '100%' }} >
+        <NoteTemplate />
+      </Popup>
+      <Footer>
+        <Flex>
+          <Flex.Item span={6}>
+            <IconButton
+              id="red-title-btn"
+              data-clipboard-text={title}
+              onClick={handleCopyTitle} icon={<OrdersOutlined />}>复制标题</IconButton>
+          </Flex.Item>
+          <Flex.Item span={6}>
+            <IconButton
+              id="red-text-btn"
+              data-clipboard-text={text}
+              onClick={handleCopyText} icon={<Description />}>复制正文</IconButton>
+          </Flex.Item>
+          <Flex.Item span={6}></Flex.Item>
+          <Flex.Item span={6}>
+            <Button style={{ width: '100%' }} shape="round" disabled color="primary">
+              预览
+            </Button>
+          </Flex.Item>
+        </Flex>
+      </Footer>
+
     </View>
 
   );

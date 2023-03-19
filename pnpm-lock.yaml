@@ -4,7 +4,9 @@ specifiers:
   '@babel/core': ^7.8.0
   '@babel/runtime': ^7.7.7
   '@pmmmwh/react-refresh-webpack-plugin': ^0.5.5
+  '@taroify/commerce': 0.1.0-alpha.1
   '@taroify/core': 0.1.0-alpha.1
+  '@taroify/icons': 0.1.0-alpha.1
   '@tarojs/cli': 3.6.2
   '@tarojs/components': 3.6.2
   '@tarojs/helper': 3.6.2
@@ -27,6 +29,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.20.0
   babel-plugin-import: ^1.13.6
   babel-preset-taro: 3.6.2
+  clipboard: ^2.0.11
   eslint: ^8.12.0
   eslint-config-taro: 3.6.2
   eslint-plugin-import: ^2.12.0
@@ -45,7 +48,9 @@ specifiers:
 
 dependencies:
   '@babel/runtime': 7.21.0
+  '@taroify/commerce': registry.npmmirror.com/@taroify/commerce/0.1.0-alpha.1_scuv4jgr5dmm5642w4nylibffe
   '@taroify/core': registry.npmmirror.com/@taroify/core/0.1.0-alpha.1_scuv4jgr5dmm5642w4nylibffe
+  '@taroify/icons': registry.npmmirror.com/@taroify/icons/0.1.0-alpha.1_@tarojs+components@3.6.2
   '@tarojs/components': 3.6.2_@types+react@18.0.28
   '@tarojs/helper': 3.6.2
   '@tarojs/plugin-framework-react': 3.6.2_u75edxy3y67fkn4jekn7tac6mu
@@ -60,6 +65,7 @@ dependencies:
   '@tarojs/runtime': 3.6.2
   '@tarojs/shared': 3.6.2
   '@tarojs/taro': 3.6.2_@types+react@18.0.28
+  clipboard: registry.npmmirror.com/clipboard/2.0.11
   lodash: registry.npmmirror.com/lodash/4.17.21
   mobx: 6.8.0
   mobx-react: 7.6.0_woojb62cqeyk443mbl7msrwu2e
@@ -1804,7 +1810,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.21.0
       '@tarojs/components': 3.6.2_@types+react@18.0.28
-      classnames: 2.3.2
+      classnames: registry.npmmirror.com/classnames/2.3.2
       intersection-observer: 0.7.0
       resolve-pathname: 3.0.0
       swiper: 6.8.0
@@ -13280,6 +13286,29 @@ packages:
     requiresBuild: true
     optional: true
 
+  registry.npmmirror.com/@taroify/commerce/0.1.0-alpha.1_scuv4jgr5dmm5642w4nylibffe:
+    resolution: {integrity: sha512-pav6hr9DPMiHD9jnXrg3jjyEB9AHcMeeeS9EZPHAufsWGQjg73q4bHA6C1g1h9QK4UmtKCifCEJb+C+v8WIwFA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@taroify/commerce/-/commerce-0.1.0-alpha.1.tgz}
+    id: registry.npmmirror.com/@taroify/commerce/0.1.0-alpha.1
+    name: '@taroify/commerce'
+    version: 0.1.0-alpha.1
+    peerDependencies:
+      '@tarojs/components': ^3.3.9
+      '@tarojs/taro': ^3.3.9
+      react: ^17.0.2
+    dependencies:
+      '@taroify/core': registry.npmmirror.com/@taroify/core/0.1.0-alpha.1_scuv4jgr5dmm5642w4nylibffe
+      '@tarojs/components': 3.6.2_@types+react@18.0.28
+      '@tarojs/taro': 3.6.2_@types+react@18.0.28
+      classnames: registry.npmmirror.com/classnames/2.3.2
+      lodash: registry.npmmirror.com/lodash/4.17.21
+      raf: registry.npmmirror.com/raf/3.4.1
+      react: 18.2.0
+      react-is: registry.npmmirror.com/react-is/17.0.2
+      react-transition-group: registry.npmmirror.com/react-transition-group/4.4.5_biqbaboplfbrettd7655fr4n2y
+    transitivePeerDependencies:
+      - react-dom
+    dev: false
+
   registry.npmmirror.com/@taroify/core/0.1.0-alpha.1_scuv4jgr5dmm5642w4nylibffe:
     resolution: {integrity: sha512-RCS/YQVr9YTqDkYqPh0GpottIqAyR7O9CfSxSz51c/HqLU0U4DA3ykPMor9k3d6K5A3wFzw++r61RkEfzp9+UA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@taroify/core/-/core-0.1.0-alpha.1.tgz}
     id: registry.npmmirror.com/@taroify/core/0.1.0-alpha.1
@@ -13382,6 +13411,16 @@ packages:
     version: 2.3.2
     dev: false
 
+  registry.npmmirror.com/clipboard/2.0.11:
+    resolution: {integrity: sha512-C+0bbOqkezLIsmWSvlsXS0Q0bmkugu7jcfMIACB+RDEntIzQIkdr148we28AfSloQLRdZlYL/QYyrq05j/3Faw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/clipboard/-/clipboard-2.0.11.tgz}
+    name: clipboard
+    version: 2.0.11
+    dependencies:
+      good-listener: registry.npmmirror.com/good-listener/1.2.2
+      select: registry.npmmirror.com/select/1.1.2
+      tiny-emitter: registry.npmmirror.com/tiny-emitter/2.1.0
+    dev: false
+
   registry.npmmirror.com/concat-map/0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/concat-map/-/concat-map-0.0.1.tgz}
     name: concat-map
@@ -13392,6 +13431,12 @@ packages:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/csstype/-/csstype-3.1.1.tgz}
     name: csstype
     version: 3.1.1
+    dev: false
+
+  registry.npmmirror.com/delegate/3.2.0:
+    resolution: {integrity: sha512-IofjkYBZaZivn0V8nnsMJGBr4jVLxHDheKSW88PyxS5QC4Vo9ZbZVvhzlSxY87fVq3STR6r+4cGepyHkcWOQSw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/delegate/-/delegate-3.2.0.tgz}
+    name: delegate
+    version: 3.2.0
     dev: false
 
   registry.npmmirror.com/dom-helpers/5.2.1:
@@ -13661,6 +13706,14 @@ packages:
       once: registry.npmmirror.com/once/1.4.0
       path-is-absolute: registry.npmmirror.com/path-is-absolute/1.0.1
     dev: true
+
+  registry.npmmirror.com/good-listener/1.2.2:
+    resolution: {integrity: sha512-goW1b+d9q/HIwbVYZzZ6SsTr4IgE+WA44A0GmPIQstuOrgsFcT7VEJ48nmr9GaRtNu0XTKacFLGnBPAM6Afouw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/good-listener/-/good-listener-1.2.2.tgz}
+    name: good-listener
+    version: 1.2.2
+    dependencies:
+      delegate: registry.npmmirror.com/delegate/3.2.0
+    dev: false
 
   registry.npmmirror.com/graceful-fs/4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/graceful-fs/-/graceful-fs-4.2.11.tgz}
@@ -13998,6 +14051,12 @@ packages:
     name: regenerator-runtime
     version: 0.13.11
 
+  registry.npmmirror.com/select/1.1.2:
+    resolution: {integrity: sha512-OwpTSOfy6xSs1+pwcNrv0RBMOzI39Lp3qQKUTPVVPRjCdNa5JH/oPRiqsesIskK8TVgmRiHwO4KXlV2Li9dANA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/select/-/select-1.1.2.tgz}
+    name: select
+    version: 1.1.2
+    dev: false
+
   registry.npmmirror.com/source-map/0.5.7:
     resolution: {integrity: sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/source-map/-/source-map-0.5.7.tgz}
     name: source-map
@@ -14016,6 +14075,12 @@ packages:
     name: string.fromcodepoint
     version: 0.2.1
     dev: true
+
+  registry.npmmirror.com/tiny-emitter/2.1.0:
+    resolution: {integrity: sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz}
+    name: tiny-emitter
+    version: 2.1.0
+    dev: false
 
   registry.npmmirror.com/to-fast-properties/1.0.3:
     resolution: {integrity: sha512-lxrWP8ejsq+7E3nNjwYmUBMAgjMTZoTI+sdBOpvNyijeDLa29LUn9QaoXAHv4+Z578hbmHHJKZknzxVtvo77og==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz}
