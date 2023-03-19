@@ -3,12 +3,13 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 class EmployeeResignStore {
   formated_text?: string = '';
-  text: string = '1';
+  text: string = '';
+  title: string = ''
   constructor() {
     makeAutoObservable(this);
   }
   formatText(text: string) {
-    this.formated_text = text
+    this.text = text
   }
 }
 

@@ -1,6 +1,6 @@
 import { Component, PropsWithChildren } from 'react'
 import { View } from '@tarojs/components'
-
+import { SafeArea } from "@taroify/core"
 import './app.less'
 
 
@@ -13,10 +13,14 @@ class App extends Component<PropsWithChildren> {
 
   // this.props.children 就是要渲染的页面
   render() {
-    return (
+    return (<>
       <View>
-      {this.props.children}
+        {this.props.children}
       </View>
+      <SafeArea position="bottom" />
+    </>
+
+
     )
   }
 }

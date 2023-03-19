@@ -47,7 +47,7 @@ const config = {
     }
   },
   h5: {
-    esnextModules: ['taro-ui'],
+    esnextModules: ['taro-ui','@taroify'],
     publicPath: '/',
     staticDirectory: 'static',
     postcss: {
