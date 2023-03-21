@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import { Button, Textarea, Flex, Input, Field, Navbar, Popup, Toast } from "@taroify/core"
 import { Description, OrdersOutlined } from "@taroify/icons"
 import { observer } from 'mobx-react'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import NoteTemplate from './template'
 import store from './store';
 
@@ -142,13 +142,13 @@ function Index() {
             <IconButton
               id="red-title-btn"
               data-clipboard-text={title}
-              onClick={handleCopyTitle} icon={<OrdersOutlined />}>复制标题</IconButton>
+              onClick={handleCopyTitle} icon={<OrdersOutlined />}><span className='icon-btn-text'>复制标题</span></IconButton>
           </Flex.Item>
           <Flex.Item span={6}>
             <IconButton
               id="red-text-btn"
               data-clipboard-text={text}
-              onClick={handleCopyText} icon={<Description />}>复制正文</IconButton>
+              onClick={handleCopyText} icon={<Description />}><span className='icon-btn-text'>复制正文</span></IconButton>
           </Flex.Item>
           <Flex.Item span={6}></Flex.Item>
           <Flex.Item span={6}>

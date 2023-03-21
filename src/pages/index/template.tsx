@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { View } from '@tarojs/components'
 import { Flex, Button, Input, Field, Navbar, Cell } from "@taroify/core"
 import { Cross } from "@taroify/icons"
 import { observer } from 'mobx-react'
-import { throttle } from 'lodash'
 import store from './store';
 
 import './index.less'
