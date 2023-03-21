@@ -1,0 +1,37 @@
+name: GitHub Actions Build and Deploy Demo
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+         
+      - name: build
+        run: |
+          pnpm run build:h5
+          
+      - name: Deploy file
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+            username: ${{ secrets.SFTP_USER }}
+            server: ${{ secrets.SFTP_SERVER }}
+            local_path: './dist/*'
+            remote_path: '/data/ftp/red_dist'
+            sftp_only: true
+            password: ${{ secrets.SFTP_PWD }}
