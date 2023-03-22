@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@static/*": ["src/static/*"],
+      },
     "esModuleInterop": true,
     "target": "es2017",
     "module": "commonjs",

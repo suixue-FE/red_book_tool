@@ -1,17 +1,15 @@
 import React, { useCallback } from 'react';
-import { View } from '@tarojs/components'
-import { Button, Textarea, Flex, Input, Field, Navbar, Popup, Toast } from "@taroify/core"
-import { Description, OrdersOutlined } from "@taroify/icons"
+import { Button, Textarea, Flex, Input, Field, Navbar, Popup, Toast, FixedView } from "@taroify/core"
+import { Description, OrdersOutlined, WarnOutlined } from "@taroify/icons"
 import { observer } from 'mobx-react'
 import throttle from 'lodash/throttle'
 import NoteTemplate from './template'
 import store from './store';
 
 import IconButton from '../../components/IconButton'
-import Footer from '../../components/Footer'
-import { copy } from '../../util'
 import ClipboardJS from 'clipboard'
 import './index.less'
+import Taro from '@tarojs/taro';
 
 function Index() {
   const { formated_text, text, title, show_template } = store;
@@ -97,8 +95,16 @@ function Index() {
     })
   }, 1000, { trailing: true }), [])
 
+  const handleJumpToCheck = useCallback(throttle((e) => {
+    Taro.navigateTo({
+      url: 'pages/article/check',
+    })
+  }, 1000, { trailing: true }), [])
+
+
   return (
-    <View className='text-edit'>
+    <div className='text-edit'>
+      <Toast id="toast" />
       <Navbar>
         <Navbar.Title>笔记编辑</Navbar.Title>
         <Navbar.NavRight onClick={() => store.show_template = true}> 使用模板 </Navbar.NavRight>
@@ -126,18 +132,18 @@ function Index() {
       <Field align="center">
         <Input onInput={e => { store.formated_text = e.detail.value }} placeholder="请输入段落分割符" />
         <Button shape="round" onClick={handleClick} size="small" color="primary">
-          格式化
+          插入
         </Button>
       </Field>
       <div className='tips'>
-        ”格式化“功能会在每个段落的上面一行插入段落分割符
+        此功能会将输入的段落分隔符插入到每个段落的上面一行
       </div>
 
       <Popup open={show_template} placement="right" style={{ height: '100%' }} >
         <NoteTemplate />
       </Popup>
-      <Footer>
-        <Flex>
+      <FixedView position="bottom">
+        <Flex className='p16'>
           <Flex.Item span={6}>
             <IconButton
               id="red-title-btn"
@@ -150,16 +156,22 @@ function Index() {
               data-clipboard-text={text}
               onClick={handleCopyText} icon={<Description />}><span className='icon-btn-text'>复制正文</span></IconButton>
           </Flex.Item>
-          <Flex.Item span={6}></Flex.Item>
+          <Flex.Item span={6}>
+            <IconButton
+              id="red-text-btn"
+              data-clipboard-text={text}
+              onClick={handleJumpToCheck} icon={<WarnOutlined />}><span className='icon-btn-text'>检测</span></IconButton>
+          </Flex.Item>
           <Flex.Item span={6}>
             <Button style={{ width: '100%' }} shape="round" disabled color="primary">
               预览
             </Button>
           </Flex.Item>
         </Flex>
-      </Footer>
+      </FixedView>
 
-    </View>
+
+    </div>
 
   );
 }

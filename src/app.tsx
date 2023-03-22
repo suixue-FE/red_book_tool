@@ -5,7 +5,9 @@ import './app.less'
 
 
 class App extends Component<PropsWithChildren> {
-  componentDidMount() { }
+  componentDidMount() {
+
+  }
 
   componentDidShow() { }
 
