@@ -55,7 +55,6 @@ function Check() {
 
 
   return <div className='article-check-page'>
-    111
     <div className='reds-box'>
       <Input className='fw500 reds-title'>
         {checkedTitle}

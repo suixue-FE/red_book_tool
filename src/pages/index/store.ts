@@ -5,17 +5,12 @@ import sensitive from '@static/sensitive.json'
 
 class EmployeeResignStore {
   formated_text?: string = '';
-  text: string = '';
+  editerHtml: string = '1';
   title: string = '';
   show_template: boolean = false;
   constructor() {
     makeAutoObservable(this);
-
   }
-  formatText(text: string) {
-    this.text = text
-  }
-
 }
 
 export const normal_mint = new MintFilter(sensitive.normal)
