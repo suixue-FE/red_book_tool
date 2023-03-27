@@ -12,9 +12,56 @@ import ClipboardJS from 'clipboard'
 import Taro from '@tarojs/taro';
 import '@wangeditor/editor/dist/css/style.css'
 import { Editor, Toolbar } from '@wangeditor/editor-for-react'
-import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
+import { Boot, IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
 
+import { FormateModalMenuConf } from '@/components/EditerModule';
 import './index.less'
+
+// Boot.registerMenu(FormateModalMenuConf)
+class MyMenu {
+  constructor() {
+    this.title = 'My menu'
+    // this.iconSvg = '<svg >...</svg>'
+    this.tag = 'button'
+  }
+  getValue(editor) {
+    return ' hello '
+  }
+  isActive(editor) {
+    return false // or true
+  }
+  isDisabled(editor) {
+    return false // or true
+  }
+  exec(editor, value) {
+    editor.insertText(value) // value 即 this.getValue(editor) 的返回值
+  }
+}
+const myMenuConf = {
+  key: 'myMenu',
+  factory() {
+    return new MyMenu()
+  }
+}
+
+Boot.registerMenu(myMenuConf)
+
+const toolbarConfig: Partial<IToolbarConfig> = {
+  // toolbarKeys: [
+    // 'bulletedList',
+    // 'numberedList',
+    // 'emotion',
+    // '|',
+    // 'undo',
+    // 'redo',
+
+  // ],
+  insertKeys: {
+    index: 0,
+    keys: ['myMenu'], // show menu in toolbar
+}
+} 
+
 
 function Index() {
   const { formated_text, editerHtml, title, show_template } = store;
@@ -23,17 +70,7 @@ function Index() {
 
   // 编辑器内容
   // 工具栏配置
-  const toolbarConfig: Partial<IToolbarConfig> = {
-    toolbarKeys: [
-      // 'bulletedList',
-      // 'numberedList',
-      'emotion',
-      // '|',
-      // 'undo',
-      // 'redo',
-
-    ]
-  }  // TS 语法
+ // TS 语法
   // const toolbarConfig = { }                        // JS 语法
 
   // 编辑器配置
@@ -159,22 +196,23 @@ function Index() {
 
   return (
     <div className='text-edit'>
-      <Toast id="toast" />
+      <Toast id='toast' />
       <Navbar>
         <Navbar.Title>笔记编辑</Navbar.Title>
         <Navbar.NavRight onClick={() => store.show_template = true}> 使用模板 </Navbar.NavRight>
       </Navbar>
-      <Field align="center" rightIcon={20 - title.length}>
+      <Field align='center' rightIcon={20 - title.length}>
         <Input
           value={title}
-          className="red-text-title"
+          className='red-text-title'
           maxlength={20}
           onInput={e => {
             store.title = e.detail.value
           }}
-          placeholder="请输入标题" />
+          placeholder='请输入标题'
+        />
       </Field>
-      <Field align="center">
+      <Field align='center'>
         {/* <Textarea
           value={text}
           className='red-text-area'
@@ -186,7 +224,7 @@ function Index() {
           <Toolbar
             editor={editor}
             defaultConfig={toolbarConfig}
-            mode="default"
+            mode='default'
             style={{ borderBottom: '1px solid #ebedf0' }}
           />
           <Editor
@@ -194,16 +232,16 @@ function Index() {
             value={editerHtml}
             onCreated={setEditor}
             onChange={editor => handleTextAreaChange(editor.getHtml())}
-            mode="default"
+            mode='default'
             style={{ height: '400px', overflowY: 'hidden' }}
           />
         </div>
 
       </Field>
 
-      <Field align="center">
-        <Input onInput={e => { store.formated_text = e.detail.value }} placeholder="请输入段落分割符" />
-        <Button shape="round" onClick={handleClick} size="small" color="primary">
+      <Field align='center'>
+        <Input onInput={e => { store.formated_text = e.detail.value }} placeholder='请输入段落分割符' />
+        <Button shape='round' onClick={handleClick} size='small' color='primary'>
           插入
         </Button>
       </Field>
@@ -211,31 +249,34 @@ function Index() {
         此功能会将输入的段落分隔符插入到每个段落的上面一行
       </div>
 
-      <Popup open={show_template} placement="right" style={{ height: '100%' }} >
+      <Popup open={show_template} placement='right' style={{ height: '100%' }} >
         <NoteTemplate />
       </Popup>
-      <FixedView position="bottom">
+      <FixedView position='bottom'>
         <Flex className='p16'>
           <Flex.Item span={6}>
             <IconButton
-              id="red-title-btn"
+              id='red-title-btn'
               data-clipboard-text={title}
-              onClick={handleCopyTitle} icon={<OrdersOutlined />}><span className='icon-btn-text'>复制标题</span></IconButton>
+              onClick={handleCopyTitle} icon={<OrdersOutlined />}
+            ><span className='icon-btn-text'>复制标题</span></IconButton>
           </Flex.Item>
           <Flex.Item span={6}>
             <IconButton
-              id="red-text-btn"
+              id='red-text-btn'
               data-clipboard-text={editerHtml}
-              onClick={handleCopyText} icon={<Description />}><span className='icon-btn-text'>复制正文</span></IconButton>
+              onClick={handleCopyText} icon={<Description />}
+            ><span className='icon-btn-text'>复制正文</span></IconButton>
           </Flex.Item>
           <Flex.Item span={6}>
             <IconButton
-              id="red-text-btn"
+              id='red-text-btn'
               data-clipboard-text={editerHtml}
-              onClick={handleJumpToCheck} icon={<WarnOutlined />}><span className='icon-btn-text'>检测</span></IconButton>
+              onClick={handleJumpToCheck} icon={<WarnOutlined />}
+            ><span className='icon-btn-text'>检测</span></IconButton>
           </Flex.Item>
           <Flex.Item span={6}>
-            <Button style={{ width: '100%' }} shape="round" disabled color="primary">
+            <Button style={{ width: '100%' }} shape='round' disabled color='primary'>
               预览
             </Button>
           </Flex.Item>
