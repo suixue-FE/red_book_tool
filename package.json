@@ -35,7 +35,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
-    "@lexical/react": "^0.9.1",
+    "@lexical/list": "0.9.1",
+    "@lexical/react": "0.9.1",
     "@taroify/commerce": "0.1.0-alpha.1",
     "@taroify/core": "0.1.0-alpha.1",
     "@taroify/icons": "0.1.0-alpha.1",
@@ -56,7 +57,7 @@
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-react": "^1.0.6",
     "clipboard": "^2.0.11",
-    "lexical": "^0.9.1",
+    "lexical": "0.9.1",
     "lodash": "^4.17.21",
     "mint-filter": "^4.0.2",
     "mobx": "^6.8.0",

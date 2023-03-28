@@ -1,74 +1,78 @@
-import { $getRoot, $getSelection } from 'lexical';
-import { useEffect } from 'react';
-
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
-import { observer } from 'mobx-react';
 
-// const theme = {
-//   // Theme styling goes here
-//   ...
-// }
+import { ListItemNode, ListNode } from "@lexical/list";
 
-// When the editor changes, you can get notified via the
-// LexicalOnChangePlugin!
-function onChange(editorState) {
-  editorState.read(() => {
-    // Read the contents of the EditorState here.
-    const root = $getRoot();
-    const selection = $getSelection();
+import ToolbarPlugin from "@/LexicalPlugin/ToolbarPlugin";
+import PlaygroundTheme from "./themes/PlaygroundTheme";
+import "./check.less"
+import { Button, Dialog, Input } from "@taroify/core";
+import { useState } from "react";
+import store from "../index/store";
 
-    console.log(root, selection);
-  });
-}
+const editorConfig = {
+  namespace:'suixue-editer',
+  theme: PlaygroundTheme,
+  onError(error) {
+    throw error;
+  },
+  nodes: [ListNode, ListItemNode]
+};
 
-// Lexical React plugins are React components, which makes them
-// highly composable. Furthermore, you can lazy load plugins if
-// desired, so you don't pay the cost for plugins until you
-// actually use them.
-function MyCustomAutoFocusPlugin() {
-  const [editor] = useLexicalComposerContext();
-
-  useEffect(() => {
-    // Focus the editor when the effect fires!
-    editor.focus();
-  }, [editor]);
-
-  return null;
-}
-
-// Catch any errors that occur during Lexical updates and log them
-// or throw them as needed. If you don't throw them, Lexical will
-// try to recover gracefully without losing user data.
-function onError(error) {
-  console.error(error);
-}
-
-function Check() {
-  const initialConfig = {
-    namespace: 'MyEditor',
-    // theme,
-    onError,
-  };
-
+export default function Editor() {
+  const [dialogShow, setDialogShow] = useState(false)
+  
   return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <RichTextPlugin
-        contentEditable={<ContentEditable />}
-        placeholder={<div>Enter some text...</div>}
-        ErrorBoundary={LexicalErrorBoundary}
-      />
-      <OnChangePlugin onChange={onChange} />
-      <HistoryPlugin />
-      {/* <TreeViewPlugin />
-      <EmoticonPlugin /> */}
-      <MyCustomAutoFocusPlugin />
+    <div className="article-check">
+      <Dialog open={dialogShow} onClose={setDialogShow}>
+        <Dialog.Header>格式化</Dialog.Header>
+        <Dialog.Content>
+        <Input onInput={e => { store.formated_text = e.detail.value }} placeholder='请输入段落分割符' />
+          此功能会将输入的段落分隔符<br/>插入到每个段落的上面一行
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onClick={() => setDialogShow(false)}>取消</Button>
+          <Button onClick={() => setDialogShow(false)}>确认</Button>
+        </Dialog.Actions>
+      </Dialog>
+    <LexicalComposer initialConfig={editorConfig}>
+      <div className="editor-container">
+        <ToolbarPlugin>
+        <Button  
+        size="mini" 
+        variant="outlined" 
+        color="default"
+        onClick={() => setDialogShow(true)}
+        aria-label="formte"
+      >
+        格式化
+      </Button>
+        </ToolbarPlugin>
+
+        <RichTextPlugin
+          contentEditable={<ContentEditable className="editor-input" />}
+          placeholder={<Placeholder />}
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+        <ListPlugin />
+        <HistoryPlugin />
+        <CheckListPlugin />
+      </div>
     </LexicalComposer>
+    </div>
+    
   );
 }
-export default observer(Check)
+
+function Placeholder() {
+  return (
+    <div className="editor-placeholder">
+      请输入笔记内容
+    </div>
+  );
+}
