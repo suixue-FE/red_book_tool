@@ -1,91 +1,74 @@
+import { $getRoot, $getSelection } from 'lexical';
+import { useEffect } from 'react';
+
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { observer } from 'mobx-react';
-import React, { useCallback, useEffect, useState } from 'react';
 
-import store, { normal_mint, makeups_mint, medical_mint } from '@/pages/index/store';
+// const theme = {
+//   // Theme styling goes here
+//   ...
+// }
 
-import '@wangeditor/editor/dist/css/style.css'
-import { Editor, Toolbar } from '@wangeditor/editor-for-react'
-import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
-import { Button, Field, Input } from '@taroify/core';
+// When the editor changes, you can get notified via the
+// LexicalOnChangePlugin!
+function onChange(editorState) {
+  editorState.read(() => {
+    // Read the contents of the EditorState here.
+    const root = $getRoot();
+    const selection = $getSelection();
+
+    console.log(root, selection);
+  });
+}
+
+// Lexical React plugins are React components, which makes them
+// highly composable. Furthermore, you can lazy load plugins if
+// desired, so you don't pay the cost for plugins until you
+// actually use them.
+function MyCustomAutoFocusPlugin() {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    // Focus the editor when the effect fires!
+    editor.focus();
+  }, [editor]);
+
+  return null;
+}
+
+// Catch any errors that occur during Lexical updates and log them
+// or throw them as needed. If you don't throw them, Lexical will
+// try to recover gracefully without losing user data.
+function onError(error) {
+  console.error(error);
+}
 
 function Check() {
-  const { text, title } = store
-  const [checkedTitle, setCheckedTitle] = useState(title)
-  const [checkedText, setCheckedText] = useState(text)
+  const initialConfig = {
+    namespace: 'MyEditor',
+    // theme,
+    onError,
+  };
 
-  const [editor, setEditor] = useState<IDomEditor | null>(null)   // TS 语法
-  // const [editor, setEditor] = useState(null)                   // JS 语法
-
-  // 编辑器内容
-  // 工具栏配置
-  const toolbarConfig: Partial<IToolbarConfig> = {
-    toolbarKeys: [
-      'bulletedList',
-      'numberedList',
-      '|',
-      'undo',
-      'redo'
-    ]
-  }  // TS 语法
-  // const toolbarConfig = { }                        // JS 语法
-
-  // 编辑器配置
-  const editorConfig: Partial<IEditorConfig> = {    // TS 语法
-    // const editorConfig = {                         // JS 语法
-    placeholder: '请输入内容...',
-  }
-
-  // 及时销毁 editor ，重要！
-  useEffect(() => {
-    return () => {
-      if (editor == null) return
-      editor.destroy()
-      setEditor(null)
-    }
-  }, [editor])
-
-  const handleClick = useCallback(() => {
-    const texts = editor?.getElemsByTypePrefix('p')
-    const html = editor?.getHtml()
-    const text = editor?.getText()
-    console.log(editor, html, texts, text, 1111111);
-
-  }, [editor])
-
-
-
-  return <div className='article-check-page'>
-    <div className='reds-box'>
-      <Input className='fw500 reds-title'>
-        {checkedTitle}
-      </Input>
-      <Field align="center">
-        <Input onInput={e => { store.formated_text = e.detail.value }} placeholder="请输入段落分割符" />
-        <Button shape="round" onClick={handleClick} size="small" color="primary">
-          插入
-        </Button>
-      </Field>
-      <div style={{ border: '1px solid #ccc', zIndex: 100 }}>
-        <Toolbar
-          editor={editor}
-          defaultConfig={toolbarConfig}
-          mode="default"
-          style={{ borderBottom: '1px solid #ccc' }}
-        />
-        <Editor
-          defaultConfig={editorConfig}
-          value={checkedText}
-          onCreated={setEditor}
-          onChange={editor => setCheckedText(editor.getHtml())}
-          mode="default"
-          style={{ height: '500px', overflowY: 'hidden' }}
-        />
-      </div>
-      <div style={{ marginTop: '15px' }}>
-        {checkedText}
-      </div>
-    </div>
-  </div>
-
+  return (
+    <LexicalComposer initialConfig={initialConfig}>
+      <RichTextPlugin
+        contentEditable={<ContentEditable />}
+        placeholder={<div>Enter some text...</div>}
+        ErrorBoundary={LexicalErrorBoundary}
+      />
+      <OnChangePlugin onChange={onChange} />
+      <HistoryPlugin />
+      {/* <TreeViewPlugin />
+      <EmoticonPlugin /> */}
+      <MyCustomAutoFocusPlugin />
+    </LexicalComposer>
+  );
 }
 export default observer(Check)
