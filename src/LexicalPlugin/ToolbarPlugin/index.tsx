@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import React,{ useState,useEffect, Children } from "react";
+import React, { useState, useEffect, Children } from "react";
 import { $selectAll } from '@lexical/selection';
 import {
   INSERT_ORDERED_LIST_COMMAND,
@@ -24,9 +24,11 @@ import { Button, Dialog, Input } from "@taroify/core";
 import './index.less'
 import store from "@/pages/index/store";
 import { observer } from "mobx-react";
+import { Arrow, ArrowLeft } from "@taroify/icons";
+// import UndoSvg from '@static/icons/undo.svg'
+// import RedoSvg from '@static/icons/redo.svg'
 
-
-export default observer(function ToolbarPlugin(props){
+export default observer(function ToolbarPlugin(props) {
   const { children } = props
   const [editor] = useLexicalComposerContext();
   const [blockType, setBlockType] = useState<any>("paragraph");
@@ -34,15 +36,15 @@ export default observer(function ToolbarPlugin(props){
   const [canRedo, setCanRedo] = useState(false);
   const [dialogShow, setDialogShow] = useState(false)
 
-  const editAritcle=()=>{
+  const editAritcle = () => {
     editor.update(() => {
       const selection = $getSelection();
       if ($isRangeSelection(selection)) {
         $selectAll(selection);
         selection?.getNodes().forEach((node) => {
-          if (node?.getType() === "paragraph"&&node?.getTextContent()) {
+          if (node?.getType() === "paragraph" && node?.getTextContent()) {
             const insertNode = $createParagraphNode()
-            const insertText = $createTextNode().setTextContent(store.formated_text||' ')
+            const insertText = $createTextNode().setTextContent(store.formated_text || ' ')
             insertNode.append(insertText)
             node?.insertBefore(insertNode)
           }
@@ -53,10 +55,10 @@ export default observer(function ToolbarPlugin(props){
     setDialogShow(false)
   };
 
-  
+
   useEffect(() => {
     const removeUpdateListener = editor.registerTextContentListener(
-      (text_content) => {  
+      (text_content) => {
         store.editer_str = text_content
         editor.registerCommand<boolean>(
           CAN_UNDO_COMMAND,
@@ -66,18 +68,18 @@ export default observer(function ToolbarPlugin(props){
           },
           COMMAND_PRIORITY_CRITICAL)
         editor.registerCommand<boolean>(
-            CAN_REDO_COMMAND,
-            (payload) => {
-              setCanRedo(payload);
-              return false;
-            },
-            COMMAND_PRIORITY_CRITICAL,
-          )
+          CAN_REDO_COMMAND,
+          (payload) => {
+            setCanRedo(payload);
+            return false;
+          },
+          COMMAND_PRIORITY_CRITICAL,
+        )
       },
     )
     return removeUpdateListener;
-   }, [editor]);
-  
+  }, [editor]);
+
   const formatList = (listType) => {
     console.log(blockType);
     if (listType === "number" && blockType !== "number") {
@@ -100,7 +102,7 @@ export default observer(function ToolbarPlugin(props){
       <Dialog open={dialogShow} onClose={setDialogShow}>
         <Dialog.Header>格式化</Dialog.Header>
         <Dialog.Content>
-        <Input onInput={e => { store.formated_text = e.detail.value }} placeholder='请输入段落分割符' />
+          <Input onInput={e => { store.formated_text = e.detail.value }} placeholder='请输入段落分割符' />
           此功能会将输入的段落分隔符<br />插入到每个段落的上面一行
         </Dialog.Content>
         <Dialog.Actions>
@@ -108,33 +110,32 @@ export default observer(function ToolbarPlugin(props){
           <Button onClick={editAritcle}>确认</Button>
         </Dialog.Actions>
       </Dialog>
-      <Button  
-        size='mini' 
-        variant='outlined' 
+      <Button
+        size="small"
+        variant="text"
         color='default'
         disabled={!canUndo}
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND, undefined);
         }}
         aria-label='Undo'
+        icon={<ArrowLeft />}
       >
-        上一步
+
       </Button>
-      <Button  
-        size='mini' 
-        variant='outlined' 
+      <Button
+        size="small"
+        variant="text"
         color='default'
         disabled={!canRedo}
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, undefined);
         }}
         aria-label='Redo'
-      >
-        下一步
-      </Button>
-      <Button  
-        size='mini' 
-        variant='outlined' 
+        icon={<Arrow />} />
+      <Button
+        size="small"
+        variant="text"
         color='default'
         onClick={() => setDialogShow(true)}
         aria-label='formte'

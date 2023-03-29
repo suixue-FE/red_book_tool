@@ -1,18 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Textarea, Flex, Input, Field, Navbar, Popup, Toast, FixedView } from "@taroify/core"
-import { Description, OrdersOutlined, WarnOutlined } from "@taroify/icons"
+import React from 'react';
+import { Input, Field, Navbar, Popup, Toast } from "@taroify/core"
 import { observer } from 'mobx-react'
-import throttle from 'lodash/throttle'
 import NoteTemplate from './template'
 import store from './store';
-
-import IconButton from '../../components/IconButton'
-import ClipboardJS from 'clipboard'
 
 import ArticleEditer from '@/pages/article/Editer'
 
 import './index.less'
- 
+
 
 
 function Index() {
@@ -41,7 +36,7 @@ function Index() {
       <Popup open={show_template} placement='right' style={{ height: '100%' }} >
         <NoteTemplate />
       </Popup>
-      
+
     </div>
 
   );

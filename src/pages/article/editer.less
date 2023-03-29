@@ -11,7 +11,7 @@ button.item.dropdown-item-active i {
   .editor-container {
     box-sizing: border-box;
     background: #fff;
-    padding: 0 0 16px 0;
+    padding: 0 16px 16px 16px;
     width: 100%;
     border-radius: 2px;
     color: #000;
@@ -25,22 +25,25 @@ button.item.dropdown-item-active i {
   .editor-input {
     height: calc(100vh - 600px);
     margin-bottom: 8px;
-    padding: 16px;
+    padding: 16px 0;
     font-size: 32px;
     overflow-y: scroll;
-    :focus{
-      box-shadow: none;
-    }
     box-shadow: none;
     border: none;
   }
-  
+
+  .editor-input:focus {
+    box-shadow: none;
+    outline: none;
+    border: none;
+  }
+
   .editor-placeholder {
     color: #999;
     overflow: hidden;
     position: absolute;
     text-overflow: ellipsis;
-    top: 100px;
+    top: 90px;
     left: 16px;
     font-size: 32px;
     user-select: none;
