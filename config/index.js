@@ -76,7 +76,7 @@ const config = {
        customRoutes: {
          '/pages/index/index': '/index',
          '/pages/article/preview': '/article/preview',
-         '/pages/article/check': '/article/check'
+        //  '/pages/article/check': '/article/check'
        }
     }
   }

@@ -7,6 +7,7 @@ class EmployeeResignStore {
   formated_text?: string = '';
   editerHtml: string = '1';
   title: string = '';
+  editer_str: string = '';
   show_template: boolean = false;
   constructor() {
     makeAutoObservable(this);

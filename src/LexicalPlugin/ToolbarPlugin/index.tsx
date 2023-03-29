@@ -1,6 +1,6 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import React,{ useState,useEffect, Children } from "react";
-
+import { $selectAll } from '@lexical/selection';
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
@@ -12,24 +12,52 @@ import {
   CAN_REDO_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
   UNDO_COMMAND,
-  REDO_COMMAND
+  REDO_COMMAND,
+  $getSelection,
+  $isRangeSelection,
+  $createParagraphNode,
+  $createTextNode,
+  $setSelection,
+  $getTextContent
 } from 'lexical';
-import { Button, Dialog } from "@taroify/core";
+import { Button, Dialog, Input } from "@taroify/core";
 import './index.less'
+import store from "@/pages/index/store";
+import { observer } from "mobx-react";
 
 
-export default function ToolbarPlugin(props){
+export default observer(function ToolbarPlugin(props){
   const { children } = props
   const [editor] = useLexicalComposerContext();
   const [blockType, setBlockType] = useState<any>("paragraph");
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
+  const [dialogShow, setDialogShow] = useState(false)
 
+  const editAritcle=()=>{
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        $selectAll(selection);
+        selection?.getNodes().forEach((node) => {
+          if (node?.getType() === "paragraph"&&node?.getTextContent()) {
+            const insertNode = $createParagraphNode()
+            const insertText = $createTextNode().setTextContent(store.formated_text||' ')
+            insertNode.append(insertText)
+            node?.insertBefore(insertNode)
+          }
+        });
+        $setSelection(null);
+      }
+    });
+    setDialogShow(false)
+  };
 
+  
   useEffect(() => {
-    console.log(1000009);
-    const removeUpdateListener = editor.registerUpdateListener(
-      (_) => {   
+    const removeUpdateListener = editor.registerTextContentListener(
+      (text_content) => {  
+        store.editer_str = text_content
         editor.registerCommand<boolean>(
           CAN_UNDO_COMMAND,
           (payload) => {
@@ -68,32 +96,51 @@ export default function ToolbarPlugin(props){
   };
 
   return (
-    <div className="toolbar">
+    <div className='toolbar'>
+      <Dialog open={dialogShow} onClose={setDialogShow}>
+        <Dialog.Header>格式化</Dialog.Header>
+        <Dialog.Content>
+        <Input onInput={e => { store.formated_text = e.detail.value }} placeholder='请输入段落分割符' />
+          此功能会将输入的段落分隔符<br />插入到每个段落的上面一行
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onClick={() => setDialogShow(false)}>取消</Button>
+          <Button onClick={editAritcle}>确认</Button>
+        </Dialog.Actions>
+      </Dialog>
       <Button  
-        size="mini" 
-        variant="outlined" 
-        color="default"
+        size='mini' 
+        variant='outlined' 
+        color='default'
         disabled={!canUndo}
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND, undefined);
         }}
-        aria-label="Undo"
+        aria-label='Undo'
       >
         上一步
       </Button>
       <Button  
-        size="mini" 
-        variant="outlined" 
-        color="default"
+        size='mini' 
+        variant='outlined' 
+        color='default'
         disabled={!canRedo}
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, undefined);
         }}
-        aria-label="Redo"
+        aria-label='Redo'
       >
         下一步
       </Button>
-
+      <Button  
+        size='mini' 
+        variant='outlined' 
+        color='default'
+        onClick={() => setDialogShow(true)}
+        aria-label='formte'
+      >
+        格式化
+      </Button>
       {children}
       {/* <Button  
         size="mini" 
@@ -121,4 +168,4 @@ export default function ToolbarPlugin(props){
       </Button> */}
     </div>
   );
-}
+})
