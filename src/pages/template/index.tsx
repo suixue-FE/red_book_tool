@@ -3,9 +3,12 @@ import { View } from '@tarojs/components'
 import { Flex, Button, Input, Field, Navbar, Cell } from "@taroify/core"
 import { Cross } from "@taroify/icons"
 import { observer } from 'mobx-react'
-import store from './store';
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import store from '../index/store';
 
-import './index.less'
+// import './index.less'
+import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical';
+
 const fixed_templates = [
   {
     group: '个人',
@@ -66,23 +69,53 @@ XX吹风机
 ]
 function NoteTemplate() {
   // const { formated_text, text, title, show_template } = store;
+  const [editor] = useLexicalComposerContext();
 
+  const setArticleByNote = (note) => {
+    store.title = note.title
+    // store.text = note.text
+    
+    // note.text
+    console.log(11112,editor);
+    console.log(editor);
+    
+    editor.update(() => {
+      // editor.clear()
+      const rootNode = $getRoot();
+      rootNode.clear()
+      const insertNode = $createParagraphNode()
+      const insertText = $createTextNode().setTextContent(note.text || ' ')
+      insertNode.append(insertText)
+      rootNode.append(insertNode)
+      
+      // const selection = $getSelection();
+      // if ($isRangeSelection(selection)) {
+      //   $selectAll(selection);
+      //   selection?.getNodes().forEach((node) => {
+      //     if (node?.getType() === "paragraph" && node?.getTextContent()) {
+      //       const insertNode = $createParagraphNode()
+      //       const insertText = $createTextNode().setTextContent(store.formated_text || ' ')
+      //       insertNode.append(insertText)
+      //       node?.insertBefore(insertNode)
+      //     }
+      //   });
+      //   $setSelection(null);
+      // }
+    });
+    store.show_template = false
+  };
   return (
     <View className='note_template'>
-      <Button variant="text" color="default" onClick={() => store.show_template = false}><Cross /></Button>
+      <Button variant='text' color='default' onClick={() => store.show_template = false}><Cross /></Button>
       {fixed_templates.map(template => {
         return <Cell.Group key={template.group} title={template?.group} inset>
           {template?.notes?.map(note => {
             return <div key={note.title} className='note_part'>
-              <Flex align="center">
+              <Flex align='center'>
                 <Flex.Item className='note_title' span={18}>{note.title}</Flex.Item>
                 <Flex.Item span={6}>
-                  <Button variant="text" color="primary"
-                    onClick={() => {
-                      store.title = note.title
-                      store.text = note.text
-                      store.show_template = false
-                    }}
+                  <Button variant='text' color='primary'
+                    onClick={() => setArticleByNote(note)}
                   >使用</Button>
                 </Flex.Item>
               </Flex>

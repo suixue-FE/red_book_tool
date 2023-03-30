@@ -3,13 +3,16 @@ import React,{ useState,useEffect, Children, useCallback } from "react";
 import { $selectAll } from '@lexical/selection';
 
 import {
+  $createTextNode,
+  $getRoot,
   $getSelection,
   $getTextContent,
   $isRangeSelection,
-  $setSelection
+  $setSelection,
+  TextNode
 } from 'lexical';
 import { Button, Dialog, FixedView, Flex, Input, Toast } from "@taroify/core";
-import store from "@/pages/index/store";
+import store, { makeups_mint, medical_mint, normal_mint } from "@/pages/index/store";
 import { observer } from "mobx-react";
 import IconButton from "@/components/IconButton";
 import { Description, OrdersOutlined, WarnOutlined } from "@taroify/icons";
@@ -19,7 +22,7 @@ import "./index.less"
 
 export default observer(function ToolbarPlugin(props){
   const { editer_str, title } = store;
-
+  const [editor] = useLexicalComposerContext();
   const handleCopyTitle = useCallback(throttle((e) => {
     if (!title) {
       Toast.open('标题未输入')
@@ -55,7 +58,25 @@ export default observer(function ToolbarPlugin(props){
     }
     var clipboard = new ClipboardJS('#red-text-btn',{
       text: function() {
-          return editer_str
+        const matches = [...editer_str.matchAll(/\n/g)];
+        let newStr = matches.reduce((acc, pos, currentIndex) => {
+          const prevIndex = matches?.[currentIndex - 1 ]?.index || 0
+          // const nextIndex = matches?.[currentIndex + 1 ]?.index
+          const index = pos?.index
+          if(index){
+            const currentStr = editer_str.slice(prevIndex,index)            
+            if ((index - 1) === prevIndex) {
+              return `${acc}${currentStr} `
+            }
+            
+            return `${acc}${currentStr}`
+          }
+          return acc 
+        }, '');
+     
+        newStr = `${newStr}${editer_str.slice(matches[matches.length - 1]?.index, editer_str.length)}`
+        
+        return newStr
       }
   })
 
@@ -77,11 +98,42 @@ export default observer(function ToolbarPlugin(props){
   }, 1500, { trailing: true }), [editer_str])
 
 
-  const handleJumpToCheck = useCallback(throttle((e) => {
-    // Taro.navigateTo({
-    //   url: 'pages/article/check',
-    // })
-  }, 1000, { trailing: true }), [])
+  const filterText = useCallback(throttle((e) => {
+    editor.update(() => {
+      function getNewtextNode(wordsArr:string[], node: TextNode,textContent:string) {
+        if (wordsArr?.length) {
+          let indexs:number[] = []
+          wordsArr?.forEach(word =>{
+            if (word?.length) {              
+              const len = word?.length
+              if(len) {
+                const index = textContent.indexOf(word);
+                console.log(word,index,index + len);
+                indexs = [...indexs, index, index + len]
+              }    
+            }
+          })
+          const arr = node.splitText(...indexs)
+          arr?.forEach(element=>{
+            if (element?.getTextContent() && wordsArr?.indexOf(element?.getTextContent()) !== -1) {
+              element.setStyle('color:red')
+            }
+          })
+        }
+
+      } 
+      const rootNode = $getRoot();
+      const textNodes = rootNode.getAllTextNodes()
+      textNodes.forEach((node) => {
+        const textContent = node.getTextContent();
+        if (textContent) {
+          const _normal = normal_mint.filter(textContent)
+          getNewtextNode(_normal?.words,node,textContent) 
+        }
+      });
+      
+    })
+  }, 1000, { trailing: true }), [editor])
 
 
   
@@ -105,7 +157,7 @@ export default observer(function ToolbarPlugin(props){
           </Flex.Item>
           <Flex.Item span={6}>
             <IconButton
-              onClick={handleJumpToCheck} icon={<WarnOutlined />}
+              onClick={filterText} icon={<WarnOutlined />}
             ><span className='icon-btn-text'>检测</span></IconButton>
           </Flex.Item>
           <Flex.Item span={6}>
