@@ -1,4 +1,11 @@
+import path from 'path';
+
 const config = {
+  alias: {
+    '@': path.resolve(__dirname, '..', 'src'),
+    '@components': path.resolve(__dirname, '..', 'src/components'),
+    '@static': path.resolve(__dirname, '..', 'src/static'),
+  },
   projectName: 'red_book_tool',
   date: '2023-3-17',
   designWidth: 750,
@@ -63,11 +70,19 @@ const config = {
           generateScopedName: '[name]__[local]___[hash:base64:5]'
         }
       }
+    },
+    router: {
+     mode: 'hash',
+       customRoutes: {
+         '/pages/index/index': '/index',
+         '/pages/article/preview': '/article/preview',
+        //  '/pages/article/check': '/article/check'
+       }
     }
   }
 }
 
-module.exports = function (merge) {
+export default function (merge) {
   if (process.env.NODE_ENV === 'development') {
     return merge({}, config, require('./dev'))
   }

@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { View } from '@tarojs/components'
 import { Flex, Button, Input, Field, Navbar, Cell } from "@taroify/core"
 import { Cross } from "@taroify/icons"
 import { observer } from 'mobx-react'
-import { throttle } from 'lodash'
 import store from './store';
 
 import './index.less'
@@ -21,8 +20,7 @@ const fixed_templates = [
 🌈
        
 ——
-如果大家还有什么想问的，或者想要面试题库、简历优化的话直接去图1里的小助手联系我吧～
-#前端面试 #前端 #自学前端 #Web前端自学 #js`,
+如果大家还有什么想问的，或者想要面试题库、简历优化的话直接去图1里的小助手联系我吧～`,
       }
 
     ]

@@ -1,11 +1,13 @@
 import { Component, PropsWithChildren } from 'react'
 import { View } from '@tarojs/components'
-import { SafeArea } from "@taroify/core"
+import { SafeArea, ConfigProvider } from "@taroify/core"
 import './app.less'
 
 
 class App extends Component<PropsWithChildren> {
-  componentDidMount() { }
+  componentDidMount() {
+
+  }
 
   componentDidShow() { }
 
