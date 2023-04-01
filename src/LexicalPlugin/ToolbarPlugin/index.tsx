@@ -18,7 +18,8 @@ import {
   $createParagraphNode,
   $createTextNode,
   $setSelection,
-  $getTextContent
+  $getTextContent,
+  $getRoot
 } from 'lexical';
 import { Button, Dialog, Input } from "@taroify/core";
 import './index.less'
@@ -41,12 +42,17 @@ export default observer(function ToolbarPlugin(props) {
       const selection = $getSelection();
       if ($isRangeSelection(selection)) {
         $selectAll(selection);
+        let currentIndex = 0
         selection?.getNodes().forEach((node) => {
-          if (node?.getType() === "paragraph" && node?.getTextContent()) {
-            const insertNode = $createParagraphNode()
-            const insertText = $createTextNode().setTextContent(store.formated_text || ' ')
-            insertNode.append(insertText)
-            node?.insertBefore(insertNode)
+          if (node?.getType() === "paragraph" && node?.getTextContent()?.trim()) {
+            currentIndex++
+            
+            if (currentIndex > 1) {
+              const insertNode = $createParagraphNode()
+              const insertText = $createTextNode().setTextContent(store.formated_text || ' ')
+              insertNode.append(insertText)
+              node?.insertBefore(insertNode)
+            }
           }
         });
         $setSelection(null);
@@ -59,7 +65,8 @@ export default observer(function ToolbarPlugin(props) {
   useEffect(() => {
     const removeUpdateListener = editor.registerTextContentListener(
       (text_content) => {
-        store.editer_str = text_content
+        
+        store.editer_str = text_content?.replace(/\n\n/g,"\n")
         editor.registerCommand<boolean>(
           CAN_UNDO_COMMAND,
           (payload) => {
@@ -111,8 +118,8 @@ export default observer(function ToolbarPlugin(props) {
         </Dialog.Actions>
       </Dialog>
       <Button
-        size="small"
-        variant="text"
+        size='small'
+        variant='text'
         color='default'
         disabled={!canUndo}
         onClick={() => {
@@ -124,18 +131,19 @@ export default observer(function ToolbarPlugin(props) {
 
       </Button>
       <Button
-        size="small"
-        variant="text"
+        size='small'
+        variant='text'
         color='default'
         disabled={!canRedo}
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, undefined);
         }}
         aria-label='Redo'
-        icon={<Arrow />} />
+        icon={<Arrow />}
+      />
       <Button
-        size="small"
-        variant="text"
+        size='small'
+        variant='text'
         color='default'
         onClick={() => setDialogShow(true)}
         aria-label='formte'

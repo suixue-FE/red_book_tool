@@ -6,7 +6,7 @@
       "@static/*": ["src/static/*"],
       },
     "esModuleInterop": true,
-    "target": "es2017",
+    "target": "es2020",
     "module": "commonjs",
     "removeComments": false,
     "preserveConstEnums": true,

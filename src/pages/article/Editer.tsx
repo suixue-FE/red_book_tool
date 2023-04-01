@@ -12,6 +12,9 @@ import PlaygroundTheme from "./themes/PlaygroundTheme";
 import "./editer.less"
 import { observer } from 'mobx-react'
 import BottonToolPlugin from "@/pages/article/BottonToolPlugin";
+import { Popup } from "@taroify/core";
+import store from "../index/store";
+import NoteTemplate from "../template";
 // import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 const editorConfig = {
@@ -25,6 +28,7 @@ const editorConfig = {
 
 
 function Editor() {
+  const { title, show_template } = store;
   return (
     <div className='article-check'>
 
@@ -42,6 +46,9 @@ function Editor() {
         <CheckListPlugin />
       </div>
       <BottonToolPlugin />
+      <Popup open={show_template} placement='right' style={{ height: '100%' }} >
+        <NoteTemplate />
+      </Popup>
     </LexicalComposer>
 
     </div>
