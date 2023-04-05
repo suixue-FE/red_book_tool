@@ -11,14 +11,14 @@ import ToolbarPlugin from "@/LexicalPlugin/ToolbarPlugin";
 import PlaygroundTheme from "./themes/PlaygroundTheme";
 import "./editer.less"
 import { observer } from 'mobx-react'
-import BottonToolPlugin from "@/pages/article/BottonToolPlugin";
+import ButtonToolPlugin from "@/pages/article/ButtonToolPlugin";
 import { Popup } from "@taroify/core";
 import store from "../index/store";
 import NoteTemplate from "../template";
 // import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 const editorConfig = {
-  namespace:'suixue-editer',
+  namespace: 'suixue-editer',
   theme: PlaygroundTheme,
   onError(error) {
     throw error;
@@ -32,27 +32,27 @@ function Editor() {
   return (
     <div className='article-check'>
 
-    <LexicalComposer initialConfig={editorConfig}>
-      <div className='editor-container'>
-        <ToolbarPlugin />
+      <LexicalComposer initialConfig={editorConfig}>
+        <div className='editor-container'>
+          <ToolbarPlugin />
 
-        <RichTextPlugin
-          contentEditable={<ContentEditable className='editor-input' />}
-          placeholder={<Placeholder />}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <ListPlugin />
-        <HistoryPlugin />
-        <CheckListPlugin />
-      </div>
-      <BottonToolPlugin />
-      <Popup open={show_template} placement='right' style={{ height: '100%' }} >
-        <NoteTemplate />
-      </Popup>
-    </LexicalComposer>
+          <RichTextPlugin
+            contentEditable={<ContentEditable className='editor-input' />}
+            placeholder={<Placeholder />}
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <ListPlugin />
+          <HistoryPlugin />
+          <CheckListPlugin />
+        </div>
+        <ButtonToolPlugin />
+        <Popup open={show_template} placement='right' style={{ height: '100%' }} >
+          <NoteTemplate />
+        </Popup>
+      </LexicalComposer>
 
     </div>
-    
+
   );
 }
 
